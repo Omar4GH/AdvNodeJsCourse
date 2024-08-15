@@ -8,7 +8,6 @@ class CustomPage {
       headless: true,
       args: ["--no-sandbox"],
     });
-
     const page = await browser.newPage();
     const customPage = new CustomPage(page);
 
@@ -37,7 +36,7 @@ class CustomPage {
     return this.page.$eval(selector, (el) => el.innerHTML);
   }
 
-  get(path) {
+  async get(path) {
     return this.page.evaluate((_path) => {
       return fetch(_path, {
         method: "GET",
@@ -49,7 +48,7 @@ class CustomPage {
     }, path);
   }
 
-  post(path, data) {
+  async post(path, data) {
     return this.page.evaluate(
       (_path, _data) => {
         return fetch(_path, {
@@ -58,7 +57,7 @@ class CustomPage {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(_data),
+          body: JSON.stringify({ _data }),
         }).then((res) => res.json());
       },
       path,
